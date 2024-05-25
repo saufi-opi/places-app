@@ -1,6 +1,11 @@
 import '@/styles/globals.css'
 
-import { GeistSans } from 'geist/font/sans'
+import { Fira_Code } from 'next/font/google'
+
+const fira = Fira_Code({
+  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['latin']
+})
 
 export const metadata = {
   title: 'Places App',
@@ -10,7 +15,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
+    <html lang="en" className={`${fira.className}`}>
       <body>{children}</body>
     </html>
   )
