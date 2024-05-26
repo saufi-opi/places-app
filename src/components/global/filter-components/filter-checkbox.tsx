@@ -17,9 +17,9 @@ function FilterCheckbox({ label, value, paramKey }: Props) {
   const router = useRouter()
   const params = new URLSearchParams(searchParams)
   const keyParamsString = params.get(paramKey) ?? ''
-  const [checked, setChecked] = useState<boolean>(keyParamsString.includes(value))
+  const [checked, setChecked] = useState<boolean | string>(keyParamsString.includes(value))
 
-  const handleChange = useDebouncedCallback((checked: boolean | string) => {
+  const handleChangeURL = useDebouncedCallback((checked: boolean | string) => {
     if (checked) {
       setChecked(true)
       const prefix = keyParamsString ? keyParamsString + ',' : ''
@@ -36,9 +36,14 @@ function FilterCheckbox({ label, value, paramKey }: Props) {
     router.replace(`${pathname}?${params.toString()}`)
   }, 300)
 
+  const handleChange = (checked: boolean | string) => {
+    setChecked(checked)
+    handleChangeURL(checked)
+  }
+
   return (
     <div className="flex items-center gap-2">
-      <Checkbox onCheckedChange={(checked) => handleChange(checked)} checked={checked} />
+      <Checkbox onCheckedChange={(checked) => handleChange(checked)} checked={!!checked} />
       <label className="cursor-pointer font-normal" onClick={() => handleChange(!checked)}>
         {label}
       </label>
