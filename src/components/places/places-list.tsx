@@ -8,7 +8,6 @@ interface Props {
   searchParams: PlacesSearchParams
 }
 
-// TODO: add pagination components
 // TODO: add activities filter
 async function PlacesList({ searchParams }: Props) {
   // Set default values if they are undefined
