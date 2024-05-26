@@ -29,6 +29,7 @@ function FilterRadius() {
     handleChangeUrl(newValue)
   }
 
+  // TODO: use input for keep in value
   return (
     <div className="space-y-3">
       <p>
