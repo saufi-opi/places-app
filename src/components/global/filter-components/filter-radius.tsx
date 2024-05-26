@@ -14,16 +14,20 @@ function FilterRadius() {
 
   const [value, setValue] = useState<number>(radius)
 
-  const handleChange = useDebouncedCallback((numbers: number[]) => {
-    const newValue = numbers[0] ?? 0
-    setValue(newValue)
+  const handleChangeUrl = useDebouncedCallback((newValue: number) => {
     if (newValue) {
       params.set('radius', newValue.toString())
     } else {
       params.delete('radius')
     }
     router.replace(`${pathname}?${params.toString()}`)
-  }, 100)
+  }, 300)
+
+  const handleChange = (numbers: number[]) => {
+    const newValue = numbers[0] ?? 0
+    setValue(newValue)
+    handleChangeUrl(newValue)
+  }
 
   return (
     <div className="space-y-3">
@@ -37,7 +41,7 @@ function FilterRadius() {
           'Not set'
         )}
       </p>
-      <Slider defaultValue={[0]} value={[value]} onValueChange={handleChange} step={1} max={1000} />
+      <Slider className="cursor-pointer" defaultValue={[0]} value={[value]} onValueChange={handleChange} step={1} max={1000} />
     </div>
   )
 }
