@@ -53,7 +53,7 @@ async function PlacesList({ searchParams }: Props) {
       <div className="grid grid-cols-1 gap-x-5 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
         {data.length ? data.map((d) => <PlaceCard key={d.id} place={d} />) : <p>No Results...</p>}
       </div>
-      <MyPagination page={page} totalPages={totalPages} />
+      {data.length > 0 && <MyPagination page={page} totalPages={totalPages} />}
     </>
   )
 }
