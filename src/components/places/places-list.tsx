@@ -12,7 +12,8 @@ interface Props {
 // TODO: add activities filter
 async function PlacesList({ searchParams }: Props) {
   // Set default values if they are undefined
-  const page = parseInt(searchParams.page ?? '1', 10)
+  let page = parseInt(searchParams.page ?? '1', 10)
+  if (page < 1) page = 1
   const pageSize = parseInt(searchParams.pageSize ?? '9', 10)
   const search = searchParams.search ?? ''
   const categories = searchParams.categories?.split(',') ?? []
@@ -53,7 +54,7 @@ async function PlacesList({ searchParams }: Props) {
       <div className="grid grid-cols-1 gap-x-5 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
         {data.length ? data.map((d) => <PlaceCard key={d.id} place={d} />) : <p>No Results...</p>}
       </div>
-      {data.length > 0 && <MyPagination page={page} totalPages={totalPages} />}
+      <MyPagination page={page} totalPages={totalPages} />
     </>
   )
 }

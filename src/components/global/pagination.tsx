@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
   Pagination,
   PaginationContent,
@@ -33,12 +33,21 @@ function MyPagination(props: Props) {
     }
   }
 
-  const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams)
-    params.set('page', page.toString())
+  const handlePageChange = useCallback(
+    (page: number) => {
+      const params = new URLSearchParams(searchParams)
+      params.set('page', page.toString())
 
-    router.replace(`${pathname}?${params.toString()}`)
-  }
+      router.replace(`${pathname}?${params.toString()}`)
+    },
+    [pathname, router, searchParams]
+  )
+
+  useEffect(() => {
+    if (props.page > props.totalPages) {
+      handlePageChange(props.totalPages)
+    }
+  }, [props.totalPages, props.page, handlePageChange])
 
   return (
     <Pagination className="cursor-pointer">
