@@ -3,10 +3,14 @@ import AppMenu from './app-menu'
 import MaxWidthWrapper from '../global/max-width-wrapper'
 import { Button } from '../ui/button'
 import Link from 'next/link'
+import Mobilenavigation from './mobile-navigation'
 
 function Navbar() {
   return (
     <MaxWidthWrapper className="flex items-center justify-between">
+      <div className="block md:hidden">
+        <Mobilenavigation />
+      </div>
       <div className="text-xl font-bold">
         <Link href="/">
           Let&apos;s<span className="text-primary">Jom</span>
