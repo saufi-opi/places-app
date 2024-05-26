@@ -10,6 +10,28 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Category {
+    slug      String   @id()
+    name      String
+    Place     Place[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Place {
+    id           String   @id() @default(cuid())
+    title        String
+    description  String
+    thumbnail    String
+    address      String
+    googleMap    String
+    categorySlug String
+    category     Category @relation(fields: [categorySlug], references: [slug], onDelete: SetDefault)
+    submitBy     String?
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+}
+
 // Necessary for Next auth
 model Account {
     id                       String  @id @default(cuid())
