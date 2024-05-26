@@ -8,7 +8,9 @@ function Navbar() {
   return (
     <MaxWidthWrapper className="flex items-center justify-between">
       <div className="text-xl font-bold">
-        Let&apos;s<span className="text-primary">Jom</span>
+        <Link href="/">
+          Let&apos;s<span className="text-primary">Jom</span>
+        </Link>
       </div>
       <nav className="hidden gap-5 md:flex">
         <AppMenu />
