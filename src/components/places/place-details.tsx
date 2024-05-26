@@ -1,5 +1,5 @@
 import { db } from '@/server/db'
-import { LocateIcon, MapIcon, TagIcon } from 'lucide-react'
+import { ActivityIcon, LocateIcon, MapIcon, TagIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -9,6 +9,7 @@ interface Props {
   placeId: string
 }
 
+// TODO: include activities in data
 async function PlaceDetails({ placeId }: Props) {
   const data = await db.place.findFirst({
     where: {
@@ -30,6 +31,7 @@ async function PlaceDetails({ placeId }: Props) {
       </div>
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">{data.title}</h1>
+        <p className="text-zinc-500 dark:text-zinc-400">{data.description}</p>
         <div className="grid gap-2">
           <div className="flex items-center gap-4">
             <TagIcon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
@@ -38,15 +40,14 @@ async function PlaceDetails({ placeId }: Props) {
               <p className="text-zinc-500 dark:text-zinc-400">{data.category.name}</p>
             </div>
           </div>
-          {/* <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4">
             <ActivityIcon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
             <div>
               <h3 className="font-semibold">Activities</h3>
               <p className="text-zinc-500 dark:text-zinc-400">Sightseeing, Culinary, Shopping</p>
             </div>
-          </div> */}
+          </div>
         </div>
-        <p className="text-zinc-500 dark:text-zinc-400">{data.description}</p>
         <div className="grid gap-4">
           <div className="flex items-center gap-4">
             <LocateIcon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />

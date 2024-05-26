@@ -8,7 +8,8 @@ function PlaceDetailsSkeleton() {
         <Skeleton className="h-[400px] w-full rounded-lg" />
       </div>
       <div className="space-y-6">
-        <Skeleton className="h-8 w-3/4 rounded-md" />
+        <Skeleton className="h-14 w-3/4 rounded-md" />
+        <Skeleton className="h-24 w-full rounded-md" />
         <div className="grid gap-2">
           <div className="flex items-center gap-4">
             <Skeleton className="h-6 w-6 rounded-full" />
@@ -25,7 +26,6 @@ function PlaceDetailsSkeleton() {
             </div>
           </div>
         </div>
-        <Skeleton className="h-24 w-full rounded-md" />
         <div className="grid gap-4">
           <div className="flex items-center gap-4">
             <Skeleton className="h-6 w-6 rounded-full" />
