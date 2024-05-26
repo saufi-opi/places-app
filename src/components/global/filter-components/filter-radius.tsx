@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Slider } from '../../ui/slider'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce'
+import { Input } from '@/components/ui/input'
 
 function FilterRadius() {
   const searchParams = useSearchParams()
@@ -29,19 +30,17 @@ function FilterRadius() {
     handleChangeUrl(newValue)
   }
 
-  // TODO: use input for keep in value
   return (
     <div className="space-y-3">
-      <p>
-        {value ? (
-          <>
-            <span>{value}</span>
-            <span className="mx-1">Km</span>
-          </>
-        ) : (
-          'Not set'
-        )}
-      </p>
+      <div className="flex items-center gap-2">
+        <Input
+          placeholder="Radius"
+          type="number"
+          value={value}
+          onChange={(e) => handleChange(parseInt(e.target.value) > 1000 ? [1000] : [parseInt(e.target.value)])}
+        />
+        <span className="text-zinc-500 dark:text-zinc-400">Km</span>
+      </div>
       <Slider className="cursor-pointer" defaultValue={[0]} value={[value]} onValueChange={handleChange} step={1} max={1000} />
     </div>
   )
