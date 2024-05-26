@@ -11,11 +11,14 @@ interface Props {
 function Navlink({ href, title }: Props) {
   const pathname = usePathname()
 
+  const isActive = () => {
+    if (pathname === href) return true
+    if (pathname === '/' && href === '/') return true
+    return pathname.startsWith(href) && href !== '/'
+  }
+
   return (
-    <Link
-      className={`hover:text-zinc-900 ${pathname === href ? 'text-zinc-900' : 'text-zinc-400'} transition-all duration-300 hover:scale-105`}
-      href={href}
-    >
+    <Link className={`hover:text-zinc-900 ${isActive() ? 'text-zinc-900' : 'text-zinc-400'} transition-all duration-300 hover:scale-105`} href={href}>
       {title}
     </Link>
   )
