@@ -1,7 +1,7 @@
 import React from 'react'
 import { Skeleton } from '../ui/skeleton'
 
-const data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+const data = [1, 2, 3, 4, 5, 6]
 
 function PlacesListSkeleton() {
   return (
