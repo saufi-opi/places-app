@@ -18,7 +18,7 @@ function Search() {
       params.delete('search')
     }
     router.replace(`${pathname}?${params.toString()}`)
-  }, 200)
+  }, 300)
 
   return (
     <div className="relative">

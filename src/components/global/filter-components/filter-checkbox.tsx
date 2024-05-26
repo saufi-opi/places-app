@@ -34,7 +34,7 @@ function FilterCheckbox({ label, value, paramKey }: Props) {
       else params.delete(paramKey)
     }
     router.replace(`${pathname}?${params.toString()}`)
-  }, 200)
+  }, 300)
 
   return (
     <div className="flex items-center gap-2">
