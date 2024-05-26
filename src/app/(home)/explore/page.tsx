@@ -22,7 +22,7 @@ function ExplorePage({ searchParams }: Props) {
   const key = JSON.stringify(searchParams)
 
   return (
-    <MaxWidthWrapper className="my-20 flex flex-col gap-5 lg:flex-row">
+    <MaxWidthWrapper className="my-20 flex flex-col gap-10 lg:flex-row lg:gap-20">
       <div className="space-y-10 lg:w-1/3">
         <h2 className="text-xl font-bold">Filter Places</h2>
         <PlacesFilter />
