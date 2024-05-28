@@ -30,7 +30,7 @@ function Mobilenavigation({ className }: Props) {
           }`}
         >
           <div className="flex h-full flex-col items-center justify-center">
-            <div className="space-y-5" onClick={handleToggle}>
+            <div className="space-y-5 text-xl" onClick={handleToggle}>
               <AppMenu />
             </div>
           </div>
