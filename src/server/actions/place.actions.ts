@@ -4,7 +4,7 @@ import { db } from '../db'
 import zod from 'zod'
 import { revalidatePath } from 'next/cache'
 
-export const PlaceZodSchema = zod.object({
+const PlaceZodSchema = zod.object({
   title: zod.string(),
   description: zod.string(),
   thumbnail: zod.string(),
