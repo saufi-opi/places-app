@@ -12,7 +12,7 @@ function PlaceForm() {
   const [error, action] = useFormState(addPlace, {})
 
   return (
-    <form action={action} className="grid grid-cols-2 gap-5 space-y-4">
+    <form action={action} className="grid grid-cols-2 gap-5">
       <div className="col-span-2 space-y-2 md:col-span-1">
         <Label htmlFor="title">Place Title</Label>
         <div>
@@ -54,7 +54,7 @@ function PlaceForm() {
           <Input type="email" id="submitBy" name="submitBy" />
         </div>
       </div>
-      <SubmitButton className="w-20" title="Save" />
+      <SubmitButton className="col-span-2 w-full sm:w-20" title="Save" />
     </form>
   )
 }
