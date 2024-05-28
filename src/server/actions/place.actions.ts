@@ -3,6 +3,8 @@
 import { db } from '../db'
 import zod from 'zod'
 import { revalidatePath } from 'next/cache'
+import { type ActionReturnType } from '@/types/action'
+import { type Place } from '@prisma/client'
 
 export const PlaceZodSchema = zod.object({
   title: zod.string(),
@@ -14,7 +16,7 @@ export const PlaceZodSchema = zod.object({
   submitBy: zod.string().optional()
 })
 
-export const addPlace = async (formData: FormData) => {
+export const addPlace = async (formData: FormData): Promise<ActionReturnType<Place>> => {
   const parsed = PlaceZodSchema.safeParse(formData)
   if (!parsed.success) {
     return {
