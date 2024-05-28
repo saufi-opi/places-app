@@ -4,34 +4,23 @@ import { db } from '../db'
 import { revalidatePath } from 'next/cache'
 import { slugify } from '@/lib/utils'
 import zod from 'zod'
-import { type ActionReturnType } from '@/types/action'
-import { type Category } from '@prisma/client'
 
-export const CategoryZodSchema = zod.object({
-  slug: zod.string().optional(),
-  name: zod.string()
+const CreateCategoryZodSchema = zod.object({
+  name: zod.string().min(1, { message: 'Category name is required' })
 })
 
-export const addcategory = async (formData: FormData): Promise<ActionReturnType<Category>> => {
-  const parsed = CategoryZodSchema.safeParse(formData)
+export const addcategory = async (prevState: unknown, formData: FormData) => {
+  const parsed = CreateCategoryZodSchema.safeParse(Object.fromEntries(formData.entries()))
   if (!parsed.success) {
-    return {
-      success: false,
-      message: parsed.error.message
-    }
+    return parsed.error.formErrors.fieldErrors
   }
 
   const slug = slugify(parsed.data.name)
-  const item = await db.category.create({
+  await db.category.create({
     data: {
       slug,
       name: parsed.data.name
     }
   })
   revalidatePath('/admin/category')
-
-  return {
-    success: true,
-    item
-  }
 }
