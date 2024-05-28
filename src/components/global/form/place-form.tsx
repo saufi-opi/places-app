@@ -49,6 +49,13 @@ function PlaceForm() {
         </div>
       </div>
       <div className="col-span-2 space-y-2">
+        <Label htmlFor="thumbnail">Thumbnail</Label>
+        <div>
+          <Input type="file" id="thumbnail" name="thumbnail" />
+          {error?.thumbnail && <div className="text-sm text-destructive">{error.thumbnail}</div>}
+        </div>
+      </div>
+      <div className="col-span-2 space-y-2">
         <Label htmlFor="submitBy">Submitter Email</Label>
         <div>
           <Input type="email" id="submitBy" name="submitBy" />
