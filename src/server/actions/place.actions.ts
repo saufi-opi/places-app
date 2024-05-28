@@ -14,7 +14,7 @@ export const PlaceZodSchema = zod.object({
   submitBy: zod.string().optional()
 })
 
-export const addPlace = async (formData: FormData) => {
+export const addPlace = async (prevState: unknown, formData: FormData) => {
   const parsed = PlaceZodSchema.safeParse(formData)
   if (!parsed.success) {
     return parsed.error.formErrors.fieldErrors
