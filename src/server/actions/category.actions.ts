@@ -24,3 +24,7 @@ export const addcategory = async (prevState: unknown, formData: FormData) => {
   })
   revalidatePath('/admin/category')
 }
+
+export const getCategories = async () => {
+  return await db.category.findMany({})
+}
