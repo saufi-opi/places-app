@@ -7,6 +7,7 @@ import { useFormState } from 'react-dom'
 import SubmitButton from './submit-button'
 import { addPlace } from '@/server/actions/place.actions'
 import { Textarea } from '@/components/ui/textarea'
+import { SelectCategory } from './select-category'
 
 function PlaceForm() {
   const [error, action] = useFormState(addPlace, {})
@@ -23,7 +24,7 @@ function PlaceForm() {
       <div className="col-span-2 space-y-2 md:col-span-1">
         <Label htmlFor="categorySlug">Place Category</Label>
         <div>
-          <Input className={error?.categorySlug ? 'border-destructive' : ''} type="text" id="categorySlug" name="categorySlug" />
+          <SelectCategory className={error?.categorySlug ? 'border-destructive' : ''} id="categorySlug" name="categorySlug" />
           {error?.categorySlug && <div className="text-sm text-destructive">{error.categorySlug}</div>}
         </div>
       </div>
@@ -51,7 +52,7 @@ function PlaceForm() {
       <div className="col-span-2 space-y-2">
         <Label htmlFor="thumbnail">Thumbnail</Label>
         <div>
-          <Input type="file" id="thumbnail" name="thumbnail" />
+          <Input type="file" accept="image/*" id="thumbnail" name="thumbnail" />
           {error?.thumbnail && <div className="text-sm text-destructive">{error.thumbnail}</div>}
         </div>
       </div>
