@@ -6,7 +6,7 @@ import { slugify } from '@/lib/utils'
 import zod from 'zod'
 
 const CreateCategoryZodSchema = zod.object({
-  name: zod.string().min(1, { message: 'Category name is required' })
+  name: zod.string({ required_error: 'Category name is reuired' }).min(1, { message: 'Category name is required' })
 })
 
 export const addcategory = async (prevState: unknown, formData: FormData) => {
