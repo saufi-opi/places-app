@@ -11,8 +11,8 @@ function CategoryForm() {
   const [error, action] = useFormState(addcategory, {})
 
   return (
-    <form action={action} className="space-y-6">
-      <div className="space-y-3">
+    <form action={action} className="space-y-4">
+      <div className="space-y-2">
         <Label htmlFor="name">Category Name</Label>
         <div>
           <Input className={error?.name ? 'border-destructive' : ''} type="text" id="name" name="name" />
