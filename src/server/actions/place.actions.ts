@@ -4,6 +4,7 @@ import { db } from '../db'
 import zod from 'zod'
 import { revalidatePath } from 'next/cache'
 import { put } from '@vercel/blob'
+import { type DefaultQueryOtions } from '@/types/types'
 
 const ThumbnailZodSchema = zod
   .instanceof(File, { message: 'Place thumbnail is required' })
@@ -22,6 +23,12 @@ const PlaceZodSchema = zod.object({
 })
 
 type FormErrors = Record<string, string>
+
+interface GetPlacesOptions extends DefaultQueryOtions {
+  categories?: string[]
+  activities?: string[]
+  radius?: number
+}
 
 export const addPlace = async (prevState: unknown, formData: FormData) => {
   const parsed = PlaceZodSchema.safeParse(Object.fromEntries(formData.entries()))
@@ -46,4 +53,53 @@ export const addPlace = async (prevState: unknown, formData: FormData) => {
     }
   })
   revalidatePath('/explore')
+}
+
+// TODO: add activities filter and radius filter
+export const getPlaces = async (options?: GetPlacesOptions) => {
+  // Set default values if they are undefined
+  options ??= {}
+  options.search ??= ''
+  options.categories ??= []
+
+  const { page, pageSize, search, categories } = options
+
+  // Calculate the number of items to skip
+  const skip = page && pageSize ? (page - 1) * pageSize : undefined
+
+  // Fetch data and count from the database
+  const [data, counts] = await Promise.all([
+    db.place.findMany({
+      where: {
+        title: {
+          contains: search,
+          mode: 'insensitive'
+        },
+        categorySlug: {
+          in: categories.length ? categories : undefined
+        }
+      },
+      take: pageSize,
+      skip
+    }),
+    db.place.count({
+      where: {
+        title: {
+          contains: search,
+          mode: 'insensitive'
+        },
+        categorySlug: {
+          in: categories.length ? categories : undefined
+        }
+      }
+    })
+  ])
+
+  const totalPages = Math.ceil(counts / (pageSize ?? counts))
+
+  return {
+    data,
+    counts,
+    totalPages
+  }
 }
