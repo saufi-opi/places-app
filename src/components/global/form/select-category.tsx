@@ -19,8 +19,8 @@ export function SelectCategory(props: Props) {
   const [categories, setCategories] = useState<Category[]>([])
   useEffect(() => {
     const getData = async () => {
-      const items = await getCategories()
-      setCategories(items)
+      const { data } = await getCategories()
+      setCategories(data)
     }
     void getData()
   }, [])
