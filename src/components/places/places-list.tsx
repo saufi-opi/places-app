@@ -1,8 +1,8 @@
 import React from 'react'
 import PlaceCard from './place-card'
-import { db } from '@/server/db'
 import { type PlacesSearchParams } from '@/app/(home)/explore/page'
 import MyPagination from '../global/pagination'
+import { getPlaces } from '@/server/actions/place.actions'
 
 interface Props {
   searchParams: PlacesSearchParams
@@ -17,36 +17,8 @@ async function PlacesList({ searchParams }: Props) {
   const search = searchParams.search ?? ''
   const categories = searchParams.categories?.split(',') ?? []
 
-  // Calculate the number of items to skip
-  const skip = (page - 1) * pageSize
-
   // Fetch data and count from the database
-  const [data, counts] = await Promise.all([
-    db.place.findMany({
-      where: {
-        title: {
-          contains: search
-        },
-        categorySlug: {
-          in: categories.length ? categories : undefined
-        }
-      },
-      take: pageSize,
-      skip
-    }),
-    db.place.count({
-      where: {
-        title: {
-          contains: search
-        },
-        categorySlug: {
-          in: categories.length ? categories : undefined
-        }
-      }
-    })
-  ])
-
-  const totalPages = Math.ceil(counts / pageSize)
+  const { data, totalPages } = await getPlaces({ page, pageSize, categories, search })
 
   return (
     <>
