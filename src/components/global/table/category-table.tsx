@@ -49,7 +49,7 @@ async function CategoriesTable({ searchParams }: Props) {
       </div>
       <div className="flex">
         <MyPagination page={page} totalPages={totalPages} />
-        <p className="text-nowrap text-sm text-zinc-500">
+        <p className="text-sm text-zinc-500">
           Showing {categories.length} of {counts} result(s)
         </p>
       </div>
