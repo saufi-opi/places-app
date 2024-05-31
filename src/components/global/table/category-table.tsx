@@ -1,10 +1,12 @@
 import React from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { type CategorySearchParams } from '@/app/(admin)/admin/category/page'
-import { getCategories } from '@/server/actions/category.actions'
+import { deleteCategory, getCategories } from '@/server/actions/category.actions'
 import MyPagination from '../pagination'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { MoreVertical } from 'lucide-react'
+import DeleteDropDownMenuItem from '../delete-dropdown-menu-item'
 
 interface Props {
   searchParams: CategorySearchParams
@@ -37,10 +39,18 @@ async function CategoriesTable({ searchParams }: Props) {
                 <TableCell className="font-medium">{category.slug}</TableCell>
                 <TableCell className="font-medium">{category.name}</TableCell>
                 <TableCell>
-                  <Link href={`/dashboard/event/${category.id}`}>
-                    <Button variant="ghost">Edit</Button>
-                  </Link>
-                  <Button variant="destructive">Delete</Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <MoreVertical />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem>
+                        <Link href={`/admin/category/${category.slug}`}>Edit</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DeleteDropDownMenuItem id={category.slug} action={deleteCategory} />
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             ))}
