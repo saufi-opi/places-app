@@ -8,8 +8,8 @@ const fira = Fira_Code({
 })
 
 export const metadata = {
-  title: 'Places App',
-  description: 'Places App',
+  title: "Let'sJom",
+  description: 'Discover and explore amazing places around you',
   icons: [{ rel: 'icon', url: '/favicon.ico' }]
 }
 
