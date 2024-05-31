@@ -8,6 +8,7 @@ import SubmitButton from './submit-button'
 import { addPlace } from '@/server/actions/place.actions'
 import { Textarea } from '@/components/ui/textarea'
 import { SelectCategory } from './select-category'
+import ImageUpload from './image-upload'
 
 function PlaceForm() {
   const [error, action] = useFormState(addPlace, {})
@@ -52,7 +53,7 @@ function PlaceForm() {
       <div className="col-span-2 space-y-2">
         <Label htmlFor="thumbnail">Thumbnail</Label>
         <div>
-          <Input type="file" accept="image/*" id="thumbnail" name="thumbnail" />
+          <ImageUpload id="thumbnail" name="thumbnail" />
           {error?.thumbnail && <div className="text-sm text-destructive">{error.thumbnail}</div>}
         </div>
       </div>
