@@ -51,9 +51,9 @@ async function PlacesTable({ searchParams }: Props) {
                       <MoreVertical />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem>
-                        <Link href={`/admin/place/${place.id}`}>Edit</Link>
-                      </DropdownMenuItem>
+                      <Link href={`/admin/place/${place.id}`}>
+                        <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
+                      </Link>
                       <DropdownMenuSeparator />
                       <DeleteDropDownMenuItem id={place.id} action={deletePlace} />
                     </DropdownMenuContent>

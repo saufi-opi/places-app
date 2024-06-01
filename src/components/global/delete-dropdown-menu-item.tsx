@@ -16,7 +16,7 @@ function DeleteDropDownMenuItem(props: Props) {
   }
 
   return (
-    <DropdownMenuItem className="text-destructive" onClick={handleClick}>
+    <DropdownMenuItem className="cursor-pointer text-destructive" onClick={handleClick}>
       Delete
     </DropdownMenuItem>
   )

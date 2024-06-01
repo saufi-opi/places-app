@@ -44,9 +44,9 @@ async function CategoriesTable({ searchParams }: Props) {
                       <MoreVertical />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem>
-                        <Link href={`/admin/category/${category.slug}`}>Edit</Link>
-                      </DropdownMenuItem>
+                      <Link href={`/admin/category/${category.slug}`}>
+                        <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
+                      </Link>
                       <DropdownMenuSeparator />
                       <DeleteDropDownMenuItem id={category.slug} action={deleteCategory} />
                     </DropdownMenuContent>
