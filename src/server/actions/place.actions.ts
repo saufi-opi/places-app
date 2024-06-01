@@ -79,6 +79,9 @@ export const getPlaces = async (options?: GetPlacesOptions) => {
           in: categories.length ? categories : undefined
         }
       },
+      include: {
+        category: true
+      },
       take: pageSize,
       skip
     }),
@@ -102,4 +105,10 @@ export const getPlaces = async (options?: GetPlacesOptions) => {
     counts,
     totalPages
   }
+}
+
+export const deletePlace = async (id: string) => {
+  await db.place.delete({ where: { id } })
+  revalidatePath('/explore')
+  revalidatePath('/admin/place')
 }
