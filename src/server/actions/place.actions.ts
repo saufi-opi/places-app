@@ -3,14 +3,15 @@
 import { db } from '../db'
 import zod from 'zod'
 import { revalidatePath } from 'next/cache'
-import { put } from '@vercel/blob'
+import { del, put } from '@vercel/blob'
 import { type DefaultQueryOtions } from '@/types/types'
+import { notFound } from 'next/navigation'
 
-const ThumbnailZodSchema = zod
-  .instanceof(File, { message: 'Place thumbnail is required' })
-  .refine((file) => file.size > 0 && file.type.startsWith('image/'), {
-    message: 'Place thumbnail is required'
-  })
+const FileZodSchema = zod.instanceof(File, { message: 'File is required' })
+
+const ThumbnailZodSchema = FileZodSchema.refine((file) => file.size > 0 && file.type.startsWith('image/'), {
+  message: 'Place thumbnail is required'
+})
 
 const PlaceZodSchema = zod.object({
   title: zod.string({ required_error: 'Place title is required' }).min(1, { message: 'Place title is required' }),
@@ -20,6 +21,10 @@ const PlaceZodSchema = zod.object({
   categorySlug: zod.string({ required_error: 'Place category is required' }).min(1, { message: 'Place category is required' }),
   googleMap: zod.string({ required_error: 'Google map link is required' }).min(1, { message: 'Google map link is required' }),
   submitBy: zod.string().optional()
+})
+
+const UpdatePlaceZodSchema = PlaceZodSchema.extend({
+  thumbnail: FileZodSchema.optional()
 })
 
 type FormErrors = Record<string, string>
@@ -52,6 +57,42 @@ export const addPlace = async (prevState: unknown, formData: FormData) => {
       thumbnail: url
     }
   })
+  revalidatePath('/explore')
+}
+
+export const updatePlace = async (id: string, prevState: unknown, formData: FormData) => {
+  const parsed = UpdatePlaceZodSchema.safeParse(Object.fromEntries(formData.entries()))
+  const errors: FormErrors = {}
+
+  if (!parsed.success) {
+    return parsed.error.formErrors.fieldErrors
+  }
+
+  const oldItem = await db.place.findFirst({ where: { id } })
+  if (!oldItem) return notFound()
+
+  const category = await db.category.findFirst({ where: { slug: parsed.data.categorySlug } })
+  if (!category) {
+    errors.categorySlug = 'Category does not exist'
+    return errors
+  }
+
+  const file = parsed.data.thumbnail
+  let newURL
+  if (file && file.size > 0) {
+    await del(oldItem.thumbnail)
+    const { url } = await put(file.name, file, { access: 'public' })
+    newURL = url
+  }
+
+  await db.place.update({
+    where: { id },
+    data: {
+      ...parsed.data,
+      thumbnail: newURL ? newURL : oldItem.thumbnail
+    }
+  })
+
   revalidatePath('/explore')
 }
 
@@ -105,6 +146,11 @@ export const getPlaces = async (options?: GetPlacesOptions) => {
     counts,
     totalPages
   }
+}
+
+export const getPlaceById = async (id: string) => {
+  const item = await db.place.findFirst({ where: { id } })
+  return item
 }
 
 export const deletePlace = async (id: string) => {
