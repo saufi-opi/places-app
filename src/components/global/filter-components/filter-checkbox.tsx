@@ -42,9 +42,9 @@ function FilterCheckbox({ label, value, paramKey }: Props) {
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <Checkbox onCheckedChange={(checked) => handleChange(checked)} checked={!!checked} />
-      <label className="cursor-pointer font-normal" onClick={() => handleChange(!checked)}>
+    <div className="flex items-center space-x-2">
+      <Checkbox className="my-1 self-start" onCheckedChange={(checked) => handleChange(checked)} checked={!!checked} />
+      <label className="cursor-pointer font-normal hover:text-zinc-500" onClick={() => handleChange(!checked)}>
         {label}
       </label>
     </div>
