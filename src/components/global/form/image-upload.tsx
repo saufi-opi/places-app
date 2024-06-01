@@ -8,11 +8,12 @@ import React, { type ChangeEvent, useState, useRef } from 'react'
 interface Props {
   id?: string
   name?: string
+  defaultValue?: string
 }
 
-function ImageUpload({ id, name }: Props) {
+function ImageUpload({ id, name, defaultValue }: Props) {
   const [image, setImage] = useState({
-    url: '',
+    url: defaultValue,
     name: ''
   })
   const inputRef = useRef<HTMLInputElement>(null)
