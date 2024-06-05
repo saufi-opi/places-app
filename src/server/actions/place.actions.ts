@@ -108,37 +108,50 @@ export const getPlaces = async (options?: GetPlacesOptions) => {
   // Calculate the number of items to skip
   const skip = page && pageSize ? (page - 1) * pageSize : undefined
 
-  // Fetch data and count from the database
-  const [data, counts] = await Promise.all([
-    db.place.findMany({
-      where: {
-        title: {
-          contains: search,
-          mode: 'insensitive'
-        },
-        categorySlug: {
-          in: categories.length ? categories : undefined
-        }
-      },
-      include: {
-        category: true
-      },
-      take: pageSize,
-      skip
-    }),
-    db.place.count({
-      where: {
-        title: {
-          contains: search,
-          mode: 'insensitive'
-        },
-        categorySlug: {
-          in: categories.length ? categories : undefined
-        }
+  const matchStage = {
+    $match: {
+      title: { $regex: search, $options: 'i' },
+      ...(categories.length ? { categorySlug: { $in: categories } } : {})
+    }
+  }
+
+  const lookupStage = {
+    $lookup: {
+      from: 'Category',
+      localField: 'categorySlug',
+      foreignField: 'slug',
+      as: 'category'
+    }
+  }
+
+  const unwindStage = {
+    $unwind: {
+      path: '$category',
+      preserveNullAndEmptyArrays: true
+    }
+  }
+
+  const idStage = [
+    {
+      $addFields: {
+        id: { $toString: '$_id' }
       }
-    })
+    },
+    {
+      $project: {
+        _id: 0
+      }
+    }
+  ]
+
+  // Fetch data and count from the database
+  const [data, c] = await Promise.all([
+    db.place.aggregateRaw({ pipeline: [matchStage, lookupStage, unwindStage, ...idStage, { $skip: skip }, { $limit: pageSize }] }),
+    db.place.aggregateRaw({ pipeline: [matchStage, { $count: 'count' }] })
   ])
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const counts = c.length && +c.length > 0 ? +c[0]?.count : 0
   const totalPages = Math.ceil(counts / (pageSize ?? counts))
 
   return {
