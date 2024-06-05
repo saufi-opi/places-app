@@ -20,16 +20,10 @@ async function PlacesList({ searchParams }: Props) {
   // Fetch data and count from the database
   const { data, totalPages } = await getPlaces({ page, pageSize, categories, search })
 
-  if (data.length === 0) {
-    return <h2 className="text-xl font-bold text-zinc-400">0 places found...</h2>
-  }
-
   return (
     <>
       <div className="grid grid-cols-1 gap-x-5 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-        {data.map((d) => (
-          <PlaceCard key={d.id} place={d} />
-        ))}
+        {data.length ? data.map((d) => <PlaceCard key={d.id} place={d} />) : <h2 className="text-xl font-bold text-zinc-400">0 places found...</h2>}
       </div>
       <MyPagination page={page} totalPages={totalPages} />
     </>
