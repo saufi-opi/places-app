@@ -6,7 +6,7 @@ function SubmitPlace() {
   return (
     <MaxWidthWrapper className="max-w-screen-md space-y-5 py-12">
       <h1 className="text-3xl font-bold">Submit A Place</h1>
-      <PlaceForm />
+      <PlaceForm isCreate={true} />
     </MaxWidthWrapper>
   )
 }
