@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { del, put } from '@vercel/blob'
 import { type DefaultQueryOtions } from '@/types/types'
 import { notFound } from 'next/navigation'
+import { type Category, type Place } from '@prisma/client'
 
 const FileZodSchema = zod.instanceof(File, { message: 'File is required' })
 
@@ -150,12 +151,12 @@ export const getPlaces = async (options?: GetPlacesOptions) => {
     db.place.aggregateRaw({ pipeline: [matchStage, { $count: 'count' }] })
   ])
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const counts = c.length && +c.length > 0 ? +c[0]?.count : 0
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+  const counts = Array.isArray(c) && c.length > 0 && typeof c[0] === 'object' && 'count' in c[0] ? +c[0].count : 0
   const totalPages = Math.ceil(counts / (pageSize ?? counts))
 
   return {
-    data,
+    data: data as unknown as (Place & { category?: Category })[],
     counts,
     totalPages
   }
