@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useFormState } from 'react-dom'
 import SubmitButton from './submit-button'
 import { addPlace, updatePlace } from '@/server/actions/place.actions'
@@ -10,8 +10,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { SelectCategory } from './select-category'
 import ImageUpload from './image-upload'
 import { type Place } from '@prisma/client'
-import { useJsApiLoader } from '@react-google-maps/api'
-import { env } from '@/env'
+import { useGmapAutoComplete } from '@/hooks/gmap'
 
 interface Props {
   isCreate: boolean
@@ -20,41 +19,9 @@ interface Props {
 }
 
 function PlaceForm({ isCreate, data, id }: Props) {
-  const [placeResult, setPlaceResult] = useState<{ lat?: number; lng?: number; placeId?: string }>()
-  const [error, action, loading] = useFormState(isCreate ? addPlace.bind(null, placeResult!) : updatePlace.bind(null, id!), {})
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
-    libraries: ['places']
-  })
-  const [autoComplete, setAutoComplete] = useState<google.maps.places.Autocomplete | null>(null)
   const autocompleteRef = useRef<HTMLTextAreaElement | null>(null)
-
-  useEffect(() => {
-    if (isLoaded) {
-      const newAutoComplete = new google.maps.places.Autocomplete(autocompleteRef.current as unknown as HTMLInputElement, {
-        componentRestrictions: { country: 'my' },
-        fields: ['formatted_address', 'geometry', 'place_id']
-      })
-      setAutoComplete(newAutoComplete)
-    }
-  }, [isLoaded])
-
-  useEffect(() => {
-    if (autoComplete) {
-      autoComplete.addListener('place_changed', () => {
-        const place = autoComplete.getPlace()
-        const lat = place.geometry?.location?.lat()
-        const lng = place.geometry?.location?.lng()
-        const placeId = place.place_id
-
-        setPlaceResult({
-          lat,
-          lng,
-          placeId
-        })
-      })
-    }
-  }, [autoComplete])
+  const { placeResult } = useGmapAutoComplete(autocompleteRef.current as unknown as HTMLInputElement)
+  const [error, action, loading] = useFormState(isCreate ? addPlace.bind(null, placeResult!) : updatePlace.bind(null, id!), {})
 
   return (
     <form action={action} className="grid grid-cols-2 gap-5">
