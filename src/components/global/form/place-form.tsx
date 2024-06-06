@@ -21,7 +21,7 @@ interface Props {
 function PlaceForm({ isCreate, data, id }: Props) {
   const autocompleteRef = useRef<HTMLTextAreaElement | null>(null)
   const { placeResult } = useGmapAutoComplete(autocompleteRef.current as unknown as HTMLInputElement)
-  const [error, action, loading] = useFormState(isCreate ? addPlace.bind(null, placeResult!) : updatePlace.bind(null, id!), {})
+  const [error, action, loading] = useFormState(isCreate ? addPlace.bind(null, placeResult!) : updatePlace.bind(null, id!, placeResult!), {})
 
   return (
     <form action={action} className="grid grid-cols-2 gap-5">

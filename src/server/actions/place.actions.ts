@@ -72,7 +72,7 @@ export const addPlace = async (place: GmapPlace, prevState: unknown, formData: F
   revalidatePath('/explore')
 }
 
-export const updatePlace = async (id: string, prevState: unknown, formData: FormData) => {
+export const updatePlace = async (id: string, place: GmapPlace, prevState: unknown, formData: FormData) => {
   const parsed = UpdatePlaceZodSchema.safeParse(Object.fromEntries(formData.entries()))
   const errors: FormErrors = {}
 
@@ -89,6 +89,14 @@ export const updatePlace = async (id: string, prevState: unknown, formData: Form
     return errors
   }
 
+  let newGoogleMap
+  if (oldItem.address !== parsed.data.address) {
+    const lat = place.lat
+    const lng = place.lng
+    const placeId = place.placeId
+    newGoogleMap = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}&query_place_id=${placeId}`
+  }
+
   const file = parsed.data.thumbnail
   let newURL
   if (file && file.size > 0) {
@@ -101,7 +109,8 @@ export const updatePlace = async (id: string, prevState: unknown, formData: Form
     where: { id },
     data: {
       ...parsed.data,
-      thumbnail: newURL ? newURL : oldItem.thumbnail
+      thumbnail: newURL ? newURL : oldItem.thumbnail,
+      googleMap: newGoogleMap ? newGoogleMap : oldItem.googleMap
     }
   })
 
