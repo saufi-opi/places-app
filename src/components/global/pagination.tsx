@@ -44,7 +44,7 @@ function MyPagination(props: Props) {
   )
 
   useEffect(() => {
-    if (props.page > props.totalPages) {
+    if (props.page > 1 && props.page > props.totalPages) {
       handlePageChange(props.totalPages)
     }
   }, [props.totalPages, props.page, handlePageChange])
