@@ -20,7 +20,6 @@ const PlaceZodSchema = zod.object({
   thumbnail: ThumbnailZodSchema,
   address: zod.string({ required_error: 'Place address is required' }).min(1, { message: 'Place address is required' }),
   categorySlug: zod.string({ required_error: 'Place category is required' }).min(1, { message: 'Place category is required' }),
-  googleMap: zod.string({ required_error: 'Google map link is required' }).min(1, { message: 'Google map link is required' }),
   submitBy: zod.string().optional()
 })
 
@@ -36,7 +35,13 @@ interface GetPlacesOptions extends DefaultQueryOtions {
   radius?: number
 }
 
-export const addPlace = async (prevState: unknown, formData: FormData) => {
+interface GmapPlace {
+  lat?: number
+  lng?: number
+  placeId?: string
+}
+
+export const addPlace = async (place: GmapPlace, prevState: unknown, formData: FormData) => {
   const parsed = PlaceZodSchema.safeParse(Object.fromEntries(formData.entries()))
   const errors: FormErrors = {}
 
@@ -50,11 +55,17 @@ export const addPlace = async (prevState: unknown, formData: FormData) => {
     return errors
   }
 
+  const lat = place.lat
+  const lng = place.lng
+  const placeId = place.placeId
+  const googleMap = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}&query_place_id=${placeId}`
+
   const thumbnail = parsed.data.thumbnail
   const { url } = await put(thumbnail.name, thumbnail, { access: 'public' })
   await db.place.create({
     data: {
       ...parsed.data,
+      googleMap,
       thumbnail: url
     }
   })
