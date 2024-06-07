@@ -43,7 +43,7 @@ async function PlacesTable({ searchParams }: Props) {
                 <TableCell className="font-medium">
                   <Image className="h-14 w-auto" alt="thumbnail" src={place.thumbnail} width={200} height={200} />
                 </TableCell>
-                <TableCell className="font-medium">{place.address}</TableCell>
+                <TableCell className="font-medium max-w-[250px]">{place.address}</TableCell>
                 <TableCell className="font-medium">{place.category?.name ?? 'Uncategorized'}</TableCell>
                 <TableCell>
                   <DropdownMenu>
