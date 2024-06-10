@@ -55,11 +55,11 @@ function FilterRadius() {
           placeholder="Radius"
           type="number"
           value={value}
-          onChange={(e) => handleChange(parseInt(e.target.value) > 1000 ? [1000] : [parseInt(e.target.value)])}
+          onChange={(e) => handleChange(parseInt(e.target.value) > 500 ? [500] : [parseInt(e.target.value)])}
         />
         <span className="text-zinc-500 dark:text-zinc-400">Km</span>
       </div>
-      <Slider className="cursor-pointer" defaultValue={[0]} value={[value]} onValueChange={handleChange} step={1} max={1000} />
+      <Slider className="cursor-pointer" defaultValue={[0]} value={[value]} onValueChange={handleChange} step={1} max={500} />
     </div>
   )
 }
