@@ -7,7 +7,7 @@ import { del, put } from '@vercel/blob'
 import { type DefaultQueryOtions } from '@/types/types'
 import { notFound } from 'next/navigation'
 import { type Category, type Place } from '@prisma/client'
-import { env } from '@/env'
+import { getGmapLocation } from '@/lib/utils'
 
 const FileZodSchema = zod.instanceof(File, { message: 'File is required' })
 
@@ -26,21 +26,6 @@ const PlaceZodSchema = zod.object({
 
 const UpdatePlaceZodSchema = PlaceZodSchema.extend({
   thumbnail: FileZodSchema.optional()
-})
-
-const GmapGeocodeResult = zod.object({
-  geometry: zod.object({
-    location: zod.object({
-      lat: zod.number(),
-      lng: zod.number()
-    })
-  }),
-  place_id: zod.string()
-})
-
-const GMapGeocodeResponse = zod.object({
-  status: zod.string(),
-  results: zod.array(GmapGeocodeResult)
 })
 
 type FormErrors = Record<string, string>
@@ -74,12 +59,7 @@ export const addPlace = async (place: GmapPlace, prevState: unknown, formData: F
   // check if place coordinates or place id is missing
   if (!place?.lat || !place?.lng || !place?.placeId) {
     // using gmap encoding api to get place id and location
-    const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(parsed.data.address)}&key=${env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}`
-    )
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const result = await response.json()
-    const parsedResult = GMapGeocodeResponse.safeParse(result)
+    const parsedResult = await getGmapLocation(parsed.data.address)
     if (!parsedResult.success || parsedResult.data.status === 'ZERO_RESULTS' || !parsedResult.data.results[0]) {
       return { address: ['Cannot find coordinates for the entered address'] }
     }
@@ -126,6 +106,20 @@ export const updatePlace = async (id: string, place: GmapPlace, prevState: unkno
 
   let newGoogleMap
   if (oldItem.address !== parsed.data.address) {
+    // check if place coordinates or place id is missing
+    if (!place?.lat || !place?.lng || !place?.placeId) {
+      // using gmap encoding api to get place id and location
+      const parsedResult = await getGmapLocation(parsed.data.address)
+      if (!parsedResult.success || parsedResult.data.status === 'ZERO_RESULTS' || !parsedResult.data.results[0]) {
+        return { address: ['Cannot find coordinates for the entered address'] }
+      }
+      place = {
+        lat: parsedResult.data.results[0].geometry.location.lat,
+        lng: parsedResult.data.results[0].geometry.location.lng,
+        placeId: parsedResult.data.results[0].place_id
+      }
+    }
+
     const lat = place.lat
     const lng = place.lng
     const placeId = place.placeId
