@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { del, put } from '@vercel/blob'
 import { type DefaultQueryOtions } from '@/types/types'
 import { notFound } from 'next/navigation'
-import { type Category, type Place } from '@prisma/client'
+import { type Prisma, type Category, type Place } from '@prisma/client'
 import { getGmapLocation } from '@/lib/utils'
 
 const FileZodSchema = zod.instanceof(File, { message: 'File is required' })
@@ -34,6 +34,8 @@ interface GetPlacesOptions extends DefaultQueryOtions {
   categories?: string[]
   activities?: string[]
   radius?: number
+  lat?: number
+  lng?: number
 }
 
 interface GmapPlace {
@@ -75,13 +77,19 @@ export const addPlace = async (place: GmapPlace, prevState: unknown, formData: F
   const placeId = place.placeId
   const googleMap = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}&query_place_id=${placeId}`
 
+  const location = {
+    type: 'Point',
+    coordinates: [place.lng, place.lat]
+  }
+
   const thumbnail = parsed.data.thumbnail
   const { url } = await put(thumbnail.name, thumbnail, { access: 'public' })
   await db.place.create({
     data: {
       ...parsed.data,
       googleMap,
-      thumbnail: url
+      thumbnail: url,
+      location: location as Prisma.InputJsonValue
     }
   })
   revalidatePath('/explore')
@@ -105,6 +113,7 @@ export const updatePlace = async (id: string, place: GmapPlace, prevState: unkno
   }
 
   let newGoogleMap
+  let newLocation
   if (oldItem.address !== parsed.data.address) {
     // check if place coordinates or place id is missing
     if (!place?.lat || !place?.lng || !place?.placeId) {
@@ -124,6 +133,10 @@ export const updatePlace = async (id: string, place: GmapPlace, prevState: unkno
     const lng = place.lng
     const placeId = place.placeId
     newGoogleMap = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}&query_place_id=${placeId}`
+    newLocation = {
+      type: 'Point',
+      coordinates: [place.lng, place.lat]
+    }
   }
 
   const file = parsed.data.thumbnail
@@ -139,21 +152,23 @@ export const updatePlace = async (id: string, place: GmapPlace, prevState: unkno
     data: {
       ...parsed.data,
       thumbnail: newURL ? newURL : oldItem.thumbnail,
-      googleMap: newGoogleMap ? newGoogleMap : oldItem.googleMap
+      googleMap: newGoogleMap ? newGoogleMap : oldItem.googleMap,
+      location: newLocation ? (newLocation as Prisma.InputJsonValue) : (oldItem.location as Prisma.InputJsonValue)
     }
   })
 
   revalidatePath('/explore')
 }
 
-// TODO: add activities filter and radius filter
+// TODO: add activities filter
 export const getPlaces = async (options?: GetPlacesOptions) => {
+  console.log(options?.radius)
   // Set default values if they are undefined
   options ??= {}
   options.search ??= ''
   options.categories ??= []
 
-  const { page, pageSize, search, categories } = options
+  const { page, pageSize, search, categories, radius, lat, lng } = options
 
   // Calculate the number of items to skip
   const skip = page && pageSize ? (page - 1) * pageSize : undefined
@@ -161,7 +176,16 @@ export const getPlaces = async (options?: GetPlacesOptions) => {
   const matchStage = {
     $match: {
       title: { $regex: search, $options: 'i' },
-      ...(categories.length ? { categorySlug: { $in: categories } } : {})
+      ...(categories.length ? { categorySlug: { $in: categories } } : {}),
+      ...(radius && lat && lng
+        ? {
+            location: {
+              $geoWithin: {
+                $centerSphere: [[lng, lat], radius / 6378.1]
+              }
+            }
+          }
+        : {})
     }
   }
 
