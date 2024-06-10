@@ -162,7 +162,6 @@ export const updatePlace = async (id: string, place: GmapPlace, prevState: unkno
 
 // TODO: add activities filter
 export const getPlaces = async (options?: GetPlacesOptions) => {
-  console.log(options?.radius)
   // Set default values if they are undefined
   options ??= {}
   options.search ??= ''
