@@ -26,6 +26,7 @@ model Place {
     thumbnail    String
     address      String
     googleMap    String
+    location     Json
     categorySlug String?
     category     Category? @relation(fields: [categorySlug], references: [slug], onDelete: SetNull)
     submitBy     String?

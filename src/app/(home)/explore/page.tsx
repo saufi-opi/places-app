@@ -12,6 +12,8 @@ export interface PlacesSearchParams {
   categories?: string
   activities?: string
   radius?: string
+  lng?: string
+  lat?: string
 }
 
 interface Props {
