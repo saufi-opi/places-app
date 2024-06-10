@@ -16,9 +16,12 @@ async function PlacesList({ searchParams }: Props) {
   const pageSize = parseInt(searchParams.pageSize ?? '9', 10)
   const search = searchParams.search ?? ''
   const categories = searchParams.categories?.split(',') ?? []
+  const radius = searchParams.radius ? parseFloat(searchParams.radius) : undefined
+  const lat = searchParams.lat ? parseFloat(searchParams.lat) : undefined
+  const lng = searchParams.lng ? parseFloat(searchParams.lng) : undefined
 
   // Fetch data and count from the database
-  const { data, totalPages } = await getPlaces({ page, pageSize, categories, search })
+  const { data, totalPages } = await getPlaces({ page, pageSize, categories, search, radius, lat, lng })
 
   return (
     <>
