@@ -79,7 +79,9 @@ function PlaceForm({ isCreate, data, id }: Props) {
         </div>
       </div>
       <div className="col-span-2 space-y-2">
-        <Label htmlFor="submitBy">Submitter Email</Label>
+        <Label htmlFor="submitBy">
+          Submitter Email <span className="text-zinc-400">(Optional)</span>
+        </Label>
         <div>
           <Input type="email" id="submitBy" name="submitBy" defaultValue={data?.submitBy ?? undefined} />
         </div>
