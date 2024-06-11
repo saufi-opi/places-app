@@ -1,5 +1,5 @@
 import { db } from '@/server/db'
-import { ActivityIcon, LocateIcon, MapIcon, TagIcon } from 'lucide-react'
+import { LocateIcon, MapIcon, TagIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -38,13 +38,6 @@ async function PlaceDetails({ placeId }: Props) {
             <div>
               <h3 className="font-semibold">Category</h3>
               <p className="text-zinc-500 dark:text-zinc-400">{data.category?.name ?? 'Uncategorized'}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <ActivityIcon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
-            <div>
-              <h3 className="font-semibold">Activities</h3>
-              <p className="text-zinc-500 dark:text-zinc-400">Sightseeing, Culinary, Shopping</p>
             </div>
           </div>
         </div>
