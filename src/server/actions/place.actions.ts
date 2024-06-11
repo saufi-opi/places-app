@@ -5,9 +5,11 @@ import zod from 'zod'
 import { revalidatePath } from 'next/cache'
 import { del, put } from '@vercel/blob'
 import { type DefaultQueryOtions } from '@/types/types'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { type Prisma, type Category, type Place } from '@prisma/client'
 import { getGmapLocation } from '@/lib/utils'
+import { getServerAuthSession } from '../auth'
+import { env } from '@/env'
 
 const FileZodSchema = zod.instanceof(File, { message: 'File is required' })
 
@@ -93,6 +95,14 @@ export const addPlace = async (place: GmapPlace, prevState: unknown, formData: F
     }
   })
   revalidatePath('/explore')
+  revalidatePath('/admin/place')
+
+  const session = await getServerAuthSession()
+  if (session?.user.email === env.ADMIN_EMAIL) {
+    redirect('/admin/place')
+  } else {
+    redirect('/explore')
+  }
 }
 
 export const updatePlace = async (id: string, place: GmapPlace, prevState: unknown, formData: FormData) => {
@@ -158,6 +168,8 @@ export const updatePlace = async (id: string, place: GmapPlace, prevState: unkno
   })
 
   revalidatePath('/explore')
+  revalidatePath('/admin/place')
+  redirect('/admin/place')
 }
 
 // TODO: add activities filter
