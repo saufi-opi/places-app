@@ -10,15 +10,15 @@ function AppMenu() {
     {
       title: 'Explore',
       href: '/explore'
-    },
-    {
-      title: 'About',
-      href: '/about'
-    },
-    {
-      title: 'Contact',
-      href: '/contact'
     }
+    // {
+    //   title: 'About',
+    //   href: '/about'
+    // },
+    // {
+    //   title: 'Contact',
+    //   href: '/contact'
+    // }
   ]
   return (
     <>
