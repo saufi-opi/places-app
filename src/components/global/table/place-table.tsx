@@ -5,7 +5,7 @@ import MyPagination from '../pagination'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { MoreVertical } from 'lucide-react'
 import DeleteDropDownMenuItem from '../delete-dropdown-menu-item'
-import { type PlaceSearchParams } from '@/app/(admin)/admin/place/page'
+import { type PlaceSearchParams } from '@/app/(admin)/admin/(dashboard)/place/page'
 import { deletePlace, getPlaces } from '@/server/actions/place.actions'
 import Image from 'next/image'
 
@@ -43,7 +43,7 @@ async function PlacesTable({ searchParams }: Props) {
                 <TableCell className="font-medium">
                   <Image className="h-14 w-auto" alt="thumbnail" src={place.thumbnail} width={200} height={200} />
                 </TableCell>
-                <TableCell className="font-medium max-w-[250px]">{place.address}</TableCell>
+                <TableCell className="max-w-[250px] font-medium">{place.address}</TableCell>
                 <TableCell className="font-medium">{place.category?.name ?? 'Uncategorized'}</TableCell>
                 <TableCell>
                   <DropdownMenu>

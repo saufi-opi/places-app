@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import Navlink from './navlink'
 import { Button } from '../ui/button'
 import { MenuIcon, XIcon } from 'lucide-react'
+import { signOut } from 'next-auth/react'
 
 function AdminSidebar() {
   const [open, setOpen] = useState(false)
@@ -31,7 +32,7 @@ function AdminSidebar() {
       >
         <MenuIcon />
       </Button>
-      <div className={`absolute z-40 min-h-full w-64 border-r bg-zinc-100 transition-all duration-300 ${open ? 'left-0' : '-left-64'}`}>
+      <div className={`absolute min-h-full w-64 border-r bg-zinc-100 transition-all duration-300 ${open ? 'left-0' : '-left-64'}`}>
         <div className="flex items-center justify-between p-5">
           <div className="text-xl font-bold">
             <Link href="/">
@@ -54,6 +55,7 @@ function AdminSidebar() {
             </li>
           ))}
         </nav>
+        <Button className='w-full' onClick={() => signOut()}>Signout</Button>
       </div>
     </>
   )
