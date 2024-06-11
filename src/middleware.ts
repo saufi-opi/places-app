@@ -9,7 +9,12 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  const session = await getToken({ req, secret: env.NEXTAUTH_SECRET })
+  const session = await getToken({
+    req,
+    secret: env.NEXTAUTH_SECRET,
+    cookieName: env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token'
+  })
+
   const isAdmin = session?.email === env.ADMIN_EMAIL
 
   const isProtected = path.startsWith('/admin') && path !== '/admin/login'
