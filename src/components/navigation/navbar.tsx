@@ -29,8 +29,8 @@ async function Navbar() {
           <Button>Admin</Button>
         </Link>
       ) : (
-        <Link href="/submit-place">
-          <Button>Submit Place</Button>
+        <Link href="/share-place">
+          <Button>Add Place</Button>
         </Link>
       )}
     </MaxWidthWrapper>
