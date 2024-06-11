@@ -9,9 +9,10 @@ interface Props {
   id?: string
   name?: string
   defaultValue?: string
+  disabled?: boolean
 }
 
-function ImageUpload({ id, name, defaultValue }: Props) {
+function ImageUpload({ id, name, defaultValue, disabled }: Props) {
   const [image, setImage] = useState({
     url: defaultValue,
     name: ''
@@ -35,7 +36,7 @@ function ImageUpload({ id, name, defaultValue }: Props) {
 
   return (
     <div>
-      <Button onClick={handleCLick} type="button">
+      <Button onClick={handleCLick} type="button" disabled={disabled}>
         Upload Image
       </Button>
       <Input ref={inputRef} type="file" accept="image/*" className="hidden" id={id} name={name} onChange={handleImageUpload} />
