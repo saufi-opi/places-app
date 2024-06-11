@@ -21,7 +21,7 @@ async function PlaceDetailsPage({ params }: Props) {
 
   return (
     <MaxWidthWrapper className="space-y-8 py-20">
-      <h1 className="mb-6 text-2xl font-bold">{isCreate ? 'New' : 'Edit'} Category</h1>
+      <h1 className="mb-6 text-2xl font-bold">{isCreate ? 'New' : 'Edit'} Place</h1>
       <PlaceForm isCreate={isCreate} data={data} id={data?.id} />
     </MaxWidthWrapper>
   )
