@@ -10,7 +10,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   const session = await getToken({ req })
-  const isAdmin = session?.email === env.ADMIN_EMAIL
+  const isAdmin = session?.email == env.ADMIN_EMAIL
 
   const isProtected = path.startsWith('/admin') && path !== '/admin/login'
 
