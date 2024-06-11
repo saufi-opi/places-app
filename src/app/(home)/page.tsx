@@ -1,3 +1,4 @@
+import { FlipWords } from '@/components/animations/flip-words'
 import MaxWidthWrapper from '@/components/global/max-width-wrapper'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
@@ -10,7 +11,7 @@ export default function HomePage() {
         <div className="flex flex-col justify-center space-y-4">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tighter md:text-5xl xl:text-6xl/none">
-              <span className="text-primary">Discover</span> the Best Places to Visit
+              <FlipWords words={['Discover', 'Share']} duration={2000} /> the Best Places to Visit
             </h1>
             <p className="text-zinc-500 dark:text-zinc-400 md:text-xl">
               Explore a curated selection of the top destinations nearby. Plan your next adventure with our platform.
