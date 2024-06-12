@@ -33,14 +33,18 @@ declare module 'next-auth' {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  secret: env.NEXTAUTH_SECRET,
+  session: {
+    strategy: 'jwt'
+  },
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id
-      }
-    })
+    signIn: ({ profile }) => {
+      if (profile?.email !== env.ADMIN_EMAIL) return false
+      return true
+    },
+    session: ({ session }) => {
+      return session
+    }
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [

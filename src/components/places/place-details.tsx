@@ -1,5 +1,5 @@
 import { db } from '@/server/db'
-import { ActivityIcon, LocateIcon, MapIcon, TagIcon } from 'lucide-react'
+import { LocateIcon, MapIcon, TagIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -32,32 +32,23 @@ async function PlaceDetails({ placeId }: Props) {
       <div className="space-y-6">
         <h1 className="text-3xl font-bold">{data.title}</h1>
         <p className="text-zinc-500 dark:text-zinc-400">{data.description}</p>
-        <div className="grid gap-2">
+        <div className="grid gap-4">
           <div className="flex items-center gap-4">
-            <TagIcon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
+            <TagIcon className="h-6 w-6 min-w-6 self-start text-zinc-500 dark:text-zinc-400" />
             <div>
               <h3 className="font-semibold">Category</h3>
               <p className="text-zinc-500 dark:text-zinc-400">{data.category?.name ?? 'Uncategorized'}</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <ActivityIcon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
-            <div>
-              <h3 className="font-semibold">Activities</h3>
-              <p className="text-zinc-500 dark:text-zinc-400">Sightseeing, Culinary, Shopping</p>
-            </div>
-          </div>
-        </div>
-        <div className="grid gap-4">
-          <div className="flex items-center gap-4">
-            <LocateIcon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
+            <LocateIcon className="h-6 w-6 min-w-6 self-start text-zinc-500 dark:text-zinc-400" />
             <div>
               <h3 className="font-semibold">Address</h3>
               <p className="text-zinc-500 dark:text-zinc-400">{data.address}</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <MapIcon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
+            <MapIcon className="h-6 w-6 min-w-6 self-start text-zinc-500 dark:text-zinc-400" />
             <div>
               <h3 className="font-semibold">Google Maps</h3>
               <Link className="text-zinc-500 underline dark:text-zinc-400" href={data.googleMap}>

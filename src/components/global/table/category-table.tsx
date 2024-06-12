@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import Link from 'next/link'
-import { type CategorySearchParams } from '@/app/(admin)/admin/category/page'
+import { type CategorySearchParams } from '@/app/(admin)/admin/(dashboard)/category/page'
 import { deleteCategory, getCategories } from '@/server/actions/category.actions'
 import MyPagination from '../pagination'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'

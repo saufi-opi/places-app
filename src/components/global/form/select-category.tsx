@@ -12,6 +12,7 @@ interface Props {
   className?: string
   id?: string
   defaultValue?: string
+  disabled?: boolean
 }
 
 export function SelectCategory(props: Props) {
@@ -27,7 +28,7 @@ export function SelectCategory(props: Props) {
   }, [])
 
   return (
-    <Select value={value} onValueChange={onChange} name={props.name} defaultValue={props.defaultValue}>
+    <Select value={value} onValueChange={onChange} name={props.name} defaultValue={props.defaultValue} disabled={props.disabled}>
       <SelectTrigger className={props.className} id={props.id}>
         <SelectValue placeholder="Select a category" />
       </SelectTrigger>
