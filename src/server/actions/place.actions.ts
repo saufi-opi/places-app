@@ -240,7 +240,9 @@ export const getPlaceById = async (id: string) => {
 }
 
 export const deletePlace = async (id: string) => {
-  await db.place.delete({ where: { id } })
+  const place = await db.place.delete({ where: { id } })
+  await del(place.thumbnail)
+
   revalidatePath('/explore')
   revalidatePath('/admin/place')
 }
