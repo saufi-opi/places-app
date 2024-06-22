@@ -73,3 +73,10 @@
   background: hsl(var(--primary));
   border-radius: 10px;
 }
+
+.place_card_description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+}

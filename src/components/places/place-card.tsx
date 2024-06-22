@@ -20,7 +20,7 @@ function PlaceCard({ place }: Props) {
       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 to-transparent p-4 transition-all duration-300 group-hover:from-gray-900/60">
         <div className="flex h-full flex-col justify-end">
           <h3 className="text-xl font-bold text-white">{place.title}</h3>
-          <p className="text-sm text-gray-300">{place.description}</p>
+          <p className="place_card_description text-sm text-gray-300">{place.description}</p>
         </div>
       </div>
     </Link>
